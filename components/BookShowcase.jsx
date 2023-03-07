@@ -1,18 +1,52 @@
 import React from "react";
+import Link from 'next/link'
 
 const BookShowcase = ({ book }) => {
 
-    var imageStyle = {
-        backgroundImage: 'url(' + book.cover + ')',
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-    };
+    const getContentFragment = (index, text, obj, type) => {
+        let modifiedText = text;
+    
+        if (obj) {
+          if (obj.bold) {
+            modifiedText = (<b key={index}>{text}</b>);
+          }
+    
+          if (obj.italic) {
+            modifiedText = (<em key={index}>{text}</em>);
+          }
+    
+          if (obj.underline) {
+            modifiedText = (<u key={index}>{text}</u>);
+          }
+        }
+    
+        switch (type) {
+          case 'heading-three':
+            return <h3 key={index} className="text-xl font-semibold mb-4">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</h3>;
+          case 'paragraph':
+            return <p key={index} className="mb-8">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</p>;
+          case 'heading-four':
+            return <h4 key={index} className="text-md font-semibold mb-4">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</h4>;
+          case 'image':
+            return (
+              <img
+                key={index}
+                alt={obj.title}
+                height={obj.height}
+                width={obj.width}
+                src={obj.src}
+              />
+            );
+          default:
+            return modifiedText;
+        }
+      }; 
 
     return (
         <>
             <div className="items-center justify-center">
-                <a className="relative block group drop-shadow-md hover:drop-shadow-2xl" href="##">
-                    <img className="relative" src={book.cover}/>
+                <Link className="relative block group drop-shadow-md hover:drop-shadow-2xl" href={"/books/"+book.slug}>
+                    <img className="relative" src={book.cover.url}/>
                     <div className="absolute inset-0 object-cover w-full h-full">
                         <div className="h-full">
                             <div className="transition-all transform 
@@ -20,12 +54,15 @@ const BookShowcase = ({ book }) => {
                                 group-hover:opacity-100 
                                 group-hover:translate-y-0 h-full">
                                 <div className="p-5 bg-white h-full">
-                                    <p style={{maxHeight:"75%"}} className="text-normal text-black overflow-y-hidden">
-                                        <b>The Empire stands triumphant.</b>
-                                        <br/>
-                                        <br/>
-                                        {"For twenty years the Dread Empress has ruled over the lands that were once the Kingdom of Callow, but behind the scenes of this dawning golden age threats to the crown are rising. The nobles of the Wasteland, denied the power they crave, weave their plots behind pleasant smiles..."}
-                                    </p>
+                                    <div style={{maxHeight:"75%"}} className="text-normal text-black overflow-y-hidden">
+                                        {book.description.raw.children.map((typeObj, index) => {
+                                            const children = typeObj.children.map((item, itemIndex) => {
+                                                return getContentFragment(itemIndex, item.text, item)
+                                            })
+
+                                            return getContentFragment(index, children, typeObj, typeObj.type)
+                                        })}
+                                    </div>
                                     <p style={{maxHeight:"75%"}} className="text-normal text-black overflow-y-hidden">
                                         ...
                                     </p>
@@ -37,7 +74,7 @@ const BookShowcase = ({ book }) => {
                             </div>
                         </div>
                     </div>
-                </a>
+                </Link>
                 <div className="w-full text-center select-none">
                     <h2 className="text-2xl font-bold mt-3 mx-auto">{book.title}</h2>
                 </div>

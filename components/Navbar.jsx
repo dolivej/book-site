@@ -1,16 +1,12 @@
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-
-const navigation = [
-  { name: 'All Books', href: '#', current: true },
-  { name: 'Support', href: '#', current: false },
-]
+import Link from 'next/link'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Navbar({title}) {
+export default function Navbar({title, navigation, target}) {
   return (
     <Disclosure as="nav" className="bg-black shadow-lg">
       {({ open }) => (
@@ -30,12 +26,12 @@ export default function Navbar({title}) {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-full">
                 <div className="flex flex-shrink-0 items-center mr-auto">
-                  <h1 className="text-white font-bold text-3xl">{title}</h1>
+                  <Link className="text-white font-bold text-3xl cursor-pointer" href={target}>{title}</Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -45,7 +41,7 @@ export default function Navbar({title}) {
                         aria-current={item.current ? 'page' : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>
