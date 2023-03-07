@@ -9,6 +9,18 @@ const navigation = [
 ]
 
 const BookDetails = ({ Book }) => {
+    if(Book == undefined){
+        return (
+            <div>
+              <Head>
+                <title>{"David's Books - Woops!"}</title>
+                <link rel="icon" href="/favicon.ico" />
+              </Head>
+              <Navbar title={"Woops!"} target={"/"} navigation={navigation}/>
+            </div>
+          ) 
+    }
+    
     return (
         <div>
           <Head>
