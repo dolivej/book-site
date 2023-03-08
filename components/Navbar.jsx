@@ -26,7 +26,7 @@ export default function Navbar({title, navigation, target}) {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start w-full">
                 <div className="flex flex-shrink-0 items-center mr-auto">
-                  <Link className="text-white font-bold text-3xl cursor-pointer" href={target}>{title}</Link>
+                  <Link className="text-white font-bold text-3xl cursor-pointer hover:scale-105 ease-in-out duration-100" href={target}>{title}</Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

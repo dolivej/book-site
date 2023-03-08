@@ -45,7 +45,7 @@ const BookShowcase = ({ book }) => {
     return (
         <>
             <div className="items-center justify-center">
-                <Link className="relative block group drop-shadow-md hover:drop-shadow-2xl" href={"/books/"+book.slug}>
+                <Link className="relative block group drop-shadow-md hover:drop-shadow-2xl hover:scale-105 ease-in-out duration-100" href={"/books/"+book.slug}>
                     <img className="relative" src={book.cover.url}/>
                     <div className="absolute inset-0 object-cover w-full h-full">
                         <div className="h-full">
