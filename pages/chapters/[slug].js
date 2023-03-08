@@ -11,6 +11,19 @@ const navigation = [
 
 const ChapterPage = ({ Chapter }) => {
   // console.log(Chapter)
+
+  if(Chapter == undefined){
+    return (
+        <div>
+          <Head>
+            <title>{"David's Books - Woops!"}</title>
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <Navbar title={"Woops!"} target={"/"} navigation={navigation}/>
+        </div>
+      ) 
+  }
+
   return (
     <div>
       <Head>
@@ -20,7 +33,9 @@ const ChapterPage = ({ Chapter }) => {
       <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
       <Navbar title="David's Books" target={'/'} navigation={navigation}/>
       <div className="flex max-w-7xl pt-8 mx-auto px-8">
-        {Chapter.title}
+        <div>
+          {Chapter.title}
+        </div>
       </div>
     </div>
   )
