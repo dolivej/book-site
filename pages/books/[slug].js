@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { Navbar, BookShowcase } from '../../components'
 import { getSpecificBookOverview, getAllBooksOverview } from '../../services'
 import Link from 'next/link'
+import NextNProgress from 'nextjs-progressbar';
+import moment from 'moment';
 
 const navigation = [
     { name: 'All Books', href: '/', current: false },
@@ -68,6 +70,7 @@ const BookDetails = ({ Book }) => {
             <title>{"David's Books - " + Book.title}</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
+          <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
           <Navbar title={"David's Books"} target={'/'} navigation={navigation}/>
           <div className="md:flex lg:flex mx-auto max-w-7xl pt-8 px-12 sm:px-8 md:px-8 lg:px-8">
             <div className='sm:w-5/5 md:w-2/5 lg:w-1/5 items-center justify-center pb-8'>
@@ -77,7 +80,7 @@ const BookDetails = ({ Book }) => {
               <h1 className='font-bold text-5xl'>{Book.title}</h1>
               <div className="flex select-none mt-1 font-bold text-lg">
                     <div style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-large mt-3 text-white mr-2 px-2 py-1 rounded">{Book.wordCount+"K words"}</div>
-                    {Book.completed && <div style={{backgroundColor:"#FCA311"}} className="text-large mt-3 text-white mr-auto px-2 py-1 rounded">{"Completed"}</div>}
+                    {Book.completed && <div style={{backgroundColor:"#FCA311"}} className="text-large mt-3 text-white mr-auto px-2 py-1 rounded">{"Completed - " + moment(Book.completedDate).format('MMM, YYYY')}</div>}
                     {!Book.completed && <div style={{backgroundColor:"#FCA311"}} className="text-large mt-3 text-white mr-auto px-2 py-1 rounded">{"In Progress"}</div>}
               </div>
               <div className="text-lg text-black overflow-y-hidden mt-14">
@@ -117,4 +120,4 @@ export async function getStaticPaths() {
       paths: Books.map(({ node: { slug } }) => ({ params: { slug } })),
       fallback: true,
     };
-  }
+}

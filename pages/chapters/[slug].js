@@ -1,25 +1,47 @@
 import Head from 'next/head'
+import moment from 'moment';
 import { Navbar, BookShowcase } from '../../components'
-import { getAllBooksOverview } from '../../services'
+import { getChapter, getAllChapterSlugs } from '../../services'
+import NextNProgress from 'nextjs-progressbar';
 
 const navigation = [
-  { name: 'All Books', href: '/', current: true },
+  { name: 'All Books', href: '/', current: false },
   { name: 'Support', href: '/', current: false },
 ]
 
-const Chapter = ({ Books }) => {
+const ChapterPage = ({ Chapter }) => {
+  // console.log(Chapter)
   return (
     <div>
       <Head>
-        <title>David's Books - Book - Chapter</title>
+        <title>{"David's Books - " + Chapter.book.title + " - " + Chapter.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
       <Navbar title="David's Books" target={'/'} navigation={navigation}/>
-      <div className="flex mx-auto max-w-7xl pt-8">
-        chapter
+      <div className="flex max-w-7xl pt-8 mx-auto px-8">
+        {Chapter.title}
       </div>
     </div>
   )
 }
 
-export default Chapter
+export default ChapterPage
+
+
+export async function getStaticProps({ params }) {
+  const Chapter = await getChapter(params.slug)
+
+  return {
+    props: { Chapter }
+  }
+}
+
+export async function getStaticPaths() {
+  const Chapters = await getAllChapterSlugs();
+
+  return {
+    paths: Chapters.map(({ node: { slug } }) => ({ params: { slug } })),
+    fallback: true,
+  };
+}

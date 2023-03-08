@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Navbar, BookShowcase } from '../components'
 import { getAllBooksOverview } from '../services'
+import NextNProgress from 'nextjs-progressbar';
 
 const navigation = [
   { name: 'All Books', href: '/', current: true },
@@ -14,6 +15,7 @@ const Home = ({ Books }) => {
         <title>David's Books</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
       <Navbar title="David's Books" target={'/'} navigation={navigation}/>
       <div className="flex mx-auto max-w-7xl pt-8">
         <div className="lg:w-4/5 md:w-3/4 sm:w-full px-12 sm:px-12 grid gap-20 sm:grid-cols-1 lg:grid-cols-3 md:grid-cols-2 lg:px-8">
