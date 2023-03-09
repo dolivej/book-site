@@ -78,7 +78,7 @@ const BookDetails = ({ Book }) => {
             </div>
             <div className='sm:w-5/5 md:w-3/5 lg:w-3/5 items-center justify-center sm:px-0 md:pl-12'>
               <h1 className='font-bold text-5xl'>{Book.title}</h1>
-              <div className="flex select-none mt-1 font-bold text-lg">
+              <div className="flex select-none mt-1 font-semibold text-lg">
                     <div style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-large mt-3 text-white mr-2 px-2 py-1 rounded">{Book.wordCount+"K words"}</div>
                     {Book.completed && <div style={{backgroundColor:"#FCA311"}} className="text-large mt-3 text-white mr-auto px-2 py-1 rounded">{"Completed - " + moment(Book.completedDate).format('MMM, YYYY')}</div>}
                     {!Book.completed && <div style={{backgroundColor:"#FCA311"}} className="text-large mt-3 text-white mr-auto px-2 py-1 rounded">{"In Progress"}</div>}
