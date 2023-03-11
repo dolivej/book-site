@@ -41,11 +41,6 @@ const ChapterPage = ({ Chapter }) => {
   useEffect(() => {
     setLocalComments(Chapter.comments || {comments:[]})
     
-    console.log(localStorage.getItem('bookSiteDataSave'))
-    const myTimeout = setTimeout(() => {
-      console.log(localStorage.getItem('bookSiteDataSave'))
-    }, 5000);
-    
     if(localStorage.getItem('bookSiteDataSave') == "true"){
       setEmail(localStorage.getItem('bookSiteEmail'))
       setName(localStorage.getItem('bookSiteName'))
