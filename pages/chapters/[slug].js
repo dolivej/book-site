@@ -14,6 +14,18 @@ const navigation = [
 ]
 
 const ChapterPage = ({ Chapter }) => {
+  if(Chapter == undefined){
+    return (
+        <div>
+          <Head>
+            <title>{"David's Books - Woops!"}</title>
+            <link rel="icon" href="/favicon.ico" />
+          </Head>
+          <Navbar title={"Woops!"} target={"/"} navigation={navigation}/>
+        </div>
+      ) 
+  }
+  
   const router = useRouter();
 
   const [localComments, setLocalComments] = useState(Chapter.comments || {comments:[]});
@@ -123,18 +135,6 @@ const ChapterPage = ({ Chapter }) => {
       const replyBox = document.getElementById("reply_display_" + parentId)
       replyBox.style.display = "none"
     }
-  }
-
-  if(Chapter == undefined){
-    return (
-        <div>
-          <Head>
-            <title>{"David's Books - Woops!"}</title>
-            <link rel="icon" href="/favicon.ico" />
-          </Head>
-          <Navbar title={"Woops!"} target={"/"} navigation={navigation}/>
-        </div>
-      ) 
   }
 
   return (
