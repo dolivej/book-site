@@ -52,9 +52,7 @@ const ChapterPage = ({ Chapter }) => {
     }else{
       setEmail("")
       setName("")
-    }
-
-    setSaveData(localStorage.getItem('bookSiteDataSave') == "true")
+    } 
   },[router.asPath]);
 
   const handleCommentSubmission = (commentId,replyName) => {
