@@ -31,6 +31,7 @@ const ChapterPage = ({ Chapter }) => {
   const [localComments, setLocalComments] = useState(Chapter.comments || {comments:[]});
   const [error, setError] = useState(false);
   const [showSuccessMessage, setShowSucessMessage] = useState(false);
+  const [showLoadingMessage, setLoadingMessage] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [saveData, setSaveData] = useState(true);
@@ -40,7 +41,9 @@ const ChapterPage = ({ Chapter }) => {
 
   useEffect(() => {
     setLocalComments(Chapter.comments || {comments:[]})
-    
+    setError(false)
+    setShowSucessMessage(false)
+
     if(localStorage.getItem('bookSiteDataSave') == "true"){
       setEmail(localStorage.getItem('bookSiteEmail'))
       setName(localStorage.getItem('bookSiteName'))
@@ -59,16 +62,10 @@ const ChapterPage = ({ Chapter }) => {
       var commentDateObj = new Date();  //.toString()
       const commentDate = commentDateObj.toString()
 
-      const chapoterSlug = Chapter.slug
-
       if(!comment || !name) {
         setError(true)
         return;
       }
-
-      const commentObj = { name, email, comment, chapoterSlug, commentDate, replyName, replies: [] }
-      console.log(commentObj)
-      setShowSucessMessage(true)
 
       if(saveData == true){
         window.localStorage.setItem('bookSiteDataSave', true);
@@ -77,6 +74,44 @@ const ChapterPage = ({ Chapter }) => {
       }else{
         window.localStorage.setItem('bookSiteDataSave', false);
       }
+
+      const commentObj = { 
+        name, 
+        email, 
+        content: comment, 
+        date: commentDate, 
+        replyName, 
+        replies: [] 
+      }
+
+      setLoadingMessage(true)
+
+      submitComment(commentObj, commentId, Chapter.slug)
+        .then((res) => {
+          setLoadingMessage(false)
+          setShowSucessMessage(true)
+
+          setLocalComments(res.comments)
+          setTimeout(() => {
+            setShowSucessMessage(false)
+
+            var x_position = res.comments.comments.length-1
+
+            if(commentId == "new"){
+              document.getElementById("comment_" + x_position + "-base").scrollIntoView();
+            }else{
+              var locations = commentId.split("-")
+              x_position = parseInt(locations[0])
+              var y_position = res.comments.comments[x_position].replies.length-1
+
+              document.getElementById("comment_" + x_position + "-" + y_position).scrollIntoView();
+            }
+          }, 1000);
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+      
     }
   }
 
@@ -123,6 +158,8 @@ const ChapterPage = ({ Chapter }) => {
     if(!(typeof window === "undefined")){
       setError(false)
       const replyBox = document.getElementById("reply_display_" + parentId)
+
+      
       replyBox.style.display = replyBox.style.display == "none" ||  replyBox.style.display == "" ? "block" : "none"
     }
   }
@@ -196,14 +233,15 @@ const ChapterPage = ({ Chapter }) => {
               </div>
               <button style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white mr-4 px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={() => {handleCommentSubmission("new",null)}}>Post Comment</button>
               {error && <p className='text-sm font-semibold text-red-500 mb-8'>*Please fill out comment and name field!*</p>}
-              {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Posting...</p>}
+              {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Success!</p>}
+              {showLoadingMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Posting...</p>}
           </div>
 
-          <div className='mb-20'>
+          <div className='mb-20 mt-10'>
             {localComments.comments.map((comment, index_x) => {
               return (
-                <div>
-                  <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311"}} className='grid grid-cols-1 gap-4 mt-10'>
+                <div id={"comment_" + index_x + "-base"}>
+                  <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311", marginTop: "-1px"}} className='grid grid-cols-1 gap-4'>
                     <div className='w-full flex py-10'>
                       <div className='w-1/6 mr-5 sm:mr-5 md:mr-0 lg:mr-0'>
                         <Gravatar default="identicon" email={comment.email || comment.name + "@email.com"} className='shadow-md rounded-lg' size={75}/>
@@ -232,18 +270,19 @@ const ChapterPage = ({ Chapter }) => {
                               
                             </div>
                             <div className='grid grid-cols-2 gap-4 mb-4'>
-                              <button style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white mr-4 px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={() => {handleCommentSubmission(index_x + "-base",comment.name)}}>Post Reply</button>
-                              <button style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={()=>{closeReplyPressed(index_x + "-base")}}>Cancel</button>
+                              <button style={{backgroundColor:"#FCA311"}} className="text-sm sm:text-lg md:text-lg lg:text-lg lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white mr-4 px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={() => {handleCommentSubmission(index_x + "-base",comment.name)}}>Post Reply</button>
+                              <button style={{backgroundColor:"#FCA311"}} className="text-sm sm:text-lg md:text-lg lg:text-lg lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={()=>{closeReplyPressed(index_x + "-base")}}>Cancel</button>
                             </div>
                             {error && <p className='text-sm font-semibold text-red-500 mb-8'>*Please fill out comment and name field!*</p>}
-                            {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Posting...</p>}          
+                            {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Success!</p>}
+                            {showLoadingMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Posting...</p>}       
                           </div>
                       </div>
                     </div>
                   </div>
                   {comment.replies.map((reply,index_y) => {
                     return(
-                      <div className='grid grid-cols-1 gap-4'>
+                      <div id={"comment_" + index_x + "-" + index_y} className='grid grid-cols-1 gap-4'>
                         <div style={{borderBottom: "thin solid #FCA311"}} className='ml-auto w-5/6 flex py-10'>
                           <div className='w-1/6 mr-5 sm:mr-5 md:mr-0 lg:mr-0'>
                             <Gravatar default="identicon" email={reply.email || reply.name + "@email.com"} className='shadow-md rounded-lg' size={75}/>
@@ -272,11 +311,12 @@ const ChapterPage = ({ Chapter }) => {
                                   
                                 </div>
                                 <div className='grid grid-cols-2 gap-4 mb-4'>
-                                  <button style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white mr-4 px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={() => {handleCommentSubmission(index_x + "-" + index_y,reply.name)}}>Post Reply</button>
-                                  <button style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={()=>{closeReplyPressed(index_x + "-" + index_y)}}>Cancel</button>
+                                  <button style={{backgroundColor:"#FCA311"}} className="text-xs sm:text-lg md:text-lg lg:text-lg lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white mr-4 px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={() => {handleCommentSubmission(index_x + "-" + index_y,reply.name)}}>Post Reply</button>
+                                  <button style={{backgroundColor:"#FCA311"}} className="text-xs sm:text-lg md:text-lg lg:text-lg lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={()=>{closeReplyPressed(index_x + "-" + index_y)}}>Cancel</button>
                                 </div>
                                 {error && <p className='text-sm font-semibold text-red-500 mb-8'>*Please fill out comment and name field!*</p>}
-                                {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Posting...</p>}          
+                                {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Success!</p>}
+                                {showLoadingMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Posting...</p>}          
                               </div>
                           </div>                         
                         </div>    
@@ -358,4 +398,13 @@ export async function getStaticPaths() {
     paths: Chapters.map(({ node: { slug } }) => ({ params: { slug } })),
     fallback: true,
   };
+}
+
+export const submitComment = async (comment, location, slug) => {
+  const result = await fetch('/api/comments', {
+    method: 'POST',
+    body: JSON.stringify({comment, location, slug})
+  })
+
+  return result.json()
 }
