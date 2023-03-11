@@ -71,7 +71,7 @@ const BookDetails = ({ Book }) => {
           </Head>
           <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
           <Navbar title={"David's Books"} target={'/'} navigation={navigation}/>
-          <div className="md:flex lg:flex mx-auto max-w-7xl pt-8 px-12 sm:px-8 md:px-8 lg:px-8">
+          <div className="md:flex lg:flex mx-auto max-w-7xl pt-8 px-8 sm:px-8 md:px-8 lg:px-8">
             <div className='sm:w-5/5 md:w-2/5 lg:w-1/5 items-center justify-center pb-8'>
               <img src={Book.cover.url} className='drop-shadow-md'/>
             </div>
