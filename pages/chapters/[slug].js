@@ -25,7 +25,7 @@ const ChapterPage = ({ Chapter }) => {
         </div>
       ) 
   }
-  
+
   const router = useRouter();
 
   const [localComments, setLocalComments] = useState(Chapter.comments || {comments:[]});
@@ -41,6 +41,8 @@ const ChapterPage = ({ Chapter }) => {
   useEffect(() => {
     setLocalComments(Chapter.comments || {comments:[]})
     
+    console.log(localStorage.getItem('bookSiteDataSave'))
+
     if(localStorage.getItem('bookSiteDataSave') == "true"){
       setEmail(localStorage.getItem('bookSiteEmail'))
       setName(localStorage.getItem('bookSiteName'))
