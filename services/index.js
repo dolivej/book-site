@@ -6,30 +6,48 @@ const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 export const getAllBooksOverview = async () => {
     const query = gql`
     query Assets {
-        booksConnection {
-          edges {
-            node {
-              completed
-              completedDate
-              slug
-              title
-              wordCount
-              cover {
-                url
-              }
-              createdAt
-              description {
-                raw
-              }
+      booksConnection {
+        edges {
+          node {
+            completed
+            completedDate
+            slug
+            title
+            wordCount
+            cover {
+              url
+            }
+            createdAt
+            description {
+              raw
             }
           }
         }
-      }          
+      }
+      announcementsConnection {
+        edges {
+          node {
+            content {
+              raw
+            }
+          }
+        }
+      }
+      updateSchedulesConnection {
+        edges {
+          node {
+            content {
+              raw
+            }
+          }
+        }
+      }
+    }          
   `
 
   const result = await request(graphqlAPI, query);
 
-  return result.booksConnection.edges;
+  return {Books: result.booksConnection.edges, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
 
 
@@ -57,12 +75,30 @@ export const getSpecificBookOverview = async (slug) => {
                 name
             }
         }
+        announcementsConnection {
+          edges {
+            node {
+              content {
+                raw
+              }
+            }
+          }
+        }
+        updateSchedulesConnection {
+          edges {
+            node {
+              content {
+                raw
+              }
+            }
+          }
+        }
     } 
   `
 
   const result = await request(graphqlAPI, query, { slug });
-
-  return result.book;
+  
+  return {Book: result.book, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
 
 
@@ -98,12 +134,30 @@ export const getChapter = async (slug) => {
           slug
         }
       }
+      announcementsConnection {
+        edges {
+          node {
+            content {
+              raw
+            }
+          }
+        }
+      }
+      updateSchedulesConnection {
+        edges {
+          node {
+            content {
+              raw
+            }
+          }
+        }
+      }
   } 
   `
 
   const result = await request(graphqlAPI, query, { slug });
 
-  return result.chapter;
+  return {Chapter: result.chapter, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
 
 

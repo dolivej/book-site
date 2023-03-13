@@ -14,7 +14,7 @@ const navigation = [
   { name: 'Support', href: '/', current: false },
 ]
 
-const ChapterPage = ({ Chapter }) => {
+const ChapterPage = ({ Chapter, UpdateSchedule, Announcements }) => {
   if(Chapter == undefined){
     return (
         <div>
@@ -29,6 +29,7 @@ const ChapterPage = ({ Chapter }) => {
 
   const router = useRouter();
 
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
   const [localComments, setLocalComments] = useState(Chapter.comments || {comments:[]});
   const [error, setError] = useState(false);
   const [showSuccessMessage, setShowSucessMessage] = useState(false);
@@ -45,6 +46,7 @@ const ChapterPage = ({ Chapter }) => {
     setLocalComments(Chapter.comments || {comments:[]})
     setError(false)
     setShowSucessMessage(false)
+    setIsAnnouncementOpen(false)
 
     if(localStorage.getItem('bookSiteDataSave') == "true"){
       setEmail(localStorage.getItem('bookSiteEmail'))
@@ -202,7 +204,46 @@ const ChapterPage = ({ Chapter }) => {
       </Head>
       <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
       <Navbar title="David's Books" target={'/'} navigation={navigation}/>
-      <div className="max-w-7xl pt-8 mx-auto px-8">
+      <div className="mx-auto max-w-7xl pt-8 px-8 lg:w-full md:w-64 lg:ml-auto md:ml-auto lg:mr-2 md:mr-2 block lg:hidden md:hidden">
+            <div className="">
+              {!isAnnouncementOpen && <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="cursor-pointer flex mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
+                <p className="font-bold text-lg">Update Schedule & Announcements</p>
+                <svg className="w-5 ml-auto" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+              </div>}
+              {isAnnouncementOpen && <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
+                <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} className='flex cursor-pointer'>
+                  <p className="font-bold text-lg">Update Schedule & Announcements</p>
+                  <svg className="w-5 ml-auto" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M201.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 173.3 54.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                </div>
+
+                <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311"}} className="mt-10 mb-5 py-2">
+                  <p className="font-bold text-lg underline">Update Schedule:</p>
+                  {UpdateSchedule.map((Schedule) => <div className="mt-5 ml-5">
+                    {Schedule.node.content.raw.children.map((typeObj, index) => {
+                        const children = typeObj.children.map((item, itemIndex) => {
+                        return getContentFragment(itemIndex, item.text, item)
+                      })
+
+                      return getContentFragment(index, children, typeObj, typeObj.type)
+                    })}
+                  </div>)}
+                </div>
+                <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311"}} className="mt-10 mb-5 py-2">
+                  <p className="font-bold text-lg underline">Announcements:</p>
+                  {Announcements.reverse().map((Announcement, pos) => <div style={{backgroundColor:"white", borderTop: pos !== 0 ? "thin solid #FCA311" : ""}} className="mt-5 pt-5 ml-5">
+                    {Announcement.node.content.raw.children.map((typeObj, index) => {
+                        const children = typeObj.children.map((item, itemIndex) => {
+                        return getContentFragment(itemIndex, item.text, item)
+                      })
+
+                      return getContentFragment(index, children, typeObj, typeObj.type)
+                    })}
+                  </div>)}
+                </div>
+              </div>}
+            </div>
+      </div>
+      <div className="flex max-w-7xl pt-8 mx-auto px-8">
         <div className="max-w-3xl">
           <div className="flex select-none mt-1 text-xs text-gray-300 underline cursor-pointer">
             {Chapter.previousChapter && <Link href={"/chapters/" + Chapter.previousChapter.slug} className="text-large mt-3 mr-4 py-1 hover:text-black ease-in-out duration-100">Previous Chapter</Link>}
@@ -411,6 +452,34 @@ const ChapterPage = ({ Chapter }) => {
           </div> */}
           </div>
         </div>
+        <div className="pt-6 lg:w-64 md:w-64 lg:ml-auto md:ml-auto lg:-mr-6 md:-mr-6 hidden lg:block md:block mb-20">
+          <div className="w-4/5 ml-7">
+          {true && <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1">
+            <p className="font-bold text-lg">Update Schedule:</p>
+            {UpdateSchedule.map((Schedule) => <div className="mt-5">
+              {Schedule.node.content.raw.children.map((typeObj, index) => {
+                  const children = typeObj.children.map((item, itemIndex) => {
+                  return getContentFragment(itemIndex, item.text, item)
+                })
+
+                return getContentFragment(index, children, typeObj, typeObj.type)
+              })}
+            </div>)}
+          </div>}
+          {true && <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="mt-4 w-full drop-shadow-lg pt-2 px-4 pb-1">
+            <p className="font-bold text-lg">Announcements:</p>
+            {Announcements.reverse().map((Announcement) => <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311"}} className="mt-5 pt-5">
+              {Announcement.node.content.raw.children.map((typeObj, index) => {
+                  const children = typeObj.children.map((item, itemIndex) => {
+                  return getContentFragment(itemIndex, item.text, item)
+                })
+
+                return getContentFragment(index, children, typeObj, typeObj.type)
+              })}
+            </div>)}
+          </div>}
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -420,10 +489,10 @@ export default ChapterPage
 
 
 export async function getStaticProps({ params }) {
-  const Chapter = await getChapter(params.slug)
+  const Data = await getChapter(params.slug)
 
   return {
-    props: { Chapter }
+    props: { Chapter: Data.Chapter, UpdateSchedule : Data.UpdateSchedule || [], Announcements : Data.Announcements || [] }
   }
 }
 

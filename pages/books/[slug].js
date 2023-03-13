@@ -14,8 +14,9 @@ const navigation = [
     { name: 'Support', href: '/', current: false },
 ]
 
-const BookDetails = ({ Book }) => {
+const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
 
+  const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
   const [views, setViews] = useState(69)
 
   if(Book == undefined){
@@ -100,6 +101,45 @@ const BookDetails = ({ Book }) => {
           </Head>
           <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
           <Navbar title={"David's Books"} target={'/'} navigation={navigation}/>
+          <div className="mx-auto max-w-7xl pt-8 px-8 lg:w-full md:w-64 lg:ml-auto md:ml-auto lg:mr-2 md:mr-2 block lg:hidden md:hidden">
+            <div className="">
+              {!isAnnouncementOpen && <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="cursor-pointer flex mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
+                <p className="font-bold text-lg">Update Schedule & Announcements</p>
+                <svg className="w-5 ml-auto" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M201.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 338.7 54.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"/></svg>
+              </div>}
+              {isAnnouncementOpen && <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
+                <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} className='flex cursor-pointer'>
+                  <p className="font-bold text-lg">Update Schedule & Announcements</p>
+                  <svg className="w-5 ml-auto" fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M201.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 173.3 54.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+                </div>
+
+                <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311"}} className="mt-10 mb-5 py-2">
+                  <p className="font-bold text-lg underline">Update Schedule:</p>
+                  {UpdateSchedule.map((Schedule) => <div className="mt-5 ml-5">
+                    {Schedule.node.content.raw.children.map((typeObj, index) => {
+                        const children = typeObj.children.map((item, itemIndex) => {
+                        return getContentFragment(itemIndex, item.text, item)
+                      })
+
+                      return getContentFragment(index, children, typeObj, typeObj.type)
+                    })}
+                  </div>)}
+                </div>
+                <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311"}} className="mt-10 mb-5 py-2">
+                  <p className="font-bold text-lg underline">Announcements:</p>
+                  {Announcements.reverse().map((Announcement, pos) => <div style={{backgroundColor:"white", borderTop: pos !== 0 ? "thin solid #FCA311" : ""}} className="mt-5 pt-5 ml-5">
+                    {Announcement.node.content.raw.children.map((typeObj, index) => {
+                        const children = typeObj.children.map((item, itemIndex) => {
+                        return getContentFragment(itemIndex, item.text, item)
+                      })
+
+                      return getContentFragment(index, children, typeObj, typeObj.type)
+                    })}
+                  </div>)}
+                </div>
+              </div>}
+            </div>
+        </div>
           <div className="md:flex lg:flex mx-auto max-w-7xl pt-8 px-8 sm:px-8 md:px-8 lg:px-8">
             <div className='sm:w-5/5 md:w-2/5 lg:w-1/5 items-center justify-center pb-8'>
               <img src={Book.cover.url} className='drop-shadow-md'/>
@@ -140,6 +180,34 @@ const BookDetails = ({ Book }) => {
 
               </div>
             </div>
+            <div className="lg:w-64 md:w-64 lg:ml-auto md:ml-auto lg:-mr-6 md:-mr-6 hidden lg:block md:block mb-20">
+              <div className="w-4/5 ml-7">
+              {true && <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1">
+                <p className="font-bold text-lg">Update Schedule:</p>
+                {UpdateSchedule.map((Schedule) => <div className="mt-5">
+                  {Schedule.node.content.raw.children.map((typeObj, index) => {
+                      const children = typeObj.children.map((item, itemIndex) => {
+                      return getContentFragment(itemIndex, item.text, item)
+                    })
+
+                    return getContentFragment(index, children, typeObj, typeObj.type)
+                  })}
+                </div>)}
+              </div>}
+              {true && <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="mt-4 w-full drop-shadow-lg pt-2 px-4 pb-1">
+                <p className="font-bold text-lg">Announcements:</p>
+                {Announcements.reverse().map((Announcement) => <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311"}} className="mt-5 pt-5">
+                  {Announcement.node.content.raw.children.map((typeObj, index) => {
+                      const children = typeObj.children.map((item, itemIndex) => {
+                      return getContentFragment(itemIndex, item.text, item)
+                    })
+
+                    return getContentFragment(index, children, typeObj, typeObj.type)
+                  })}
+                </div>)}
+              </div>}
+              </div>
+            </div>
           </div>
         </div>
       )
@@ -148,18 +216,18 @@ const BookDetails = ({ Book }) => {
 export default BookDetails
 
 export async function getStaticProps({ params }) {
-    const Book = await getSpecificBookOverview(params.slug)
+    const Data = await getSpecificBookOverview(params.slug)
 
     return {
-      props: { Book }
+      props: { Book: Data.Book, UpdateSchedule : Data.UpdateSchedule || [], Announcements : Data.Announcements || [] }
     }
 }
 
 export async function getStaticPaths() {
-    const Books = await getAllBooksOverview();
+    const Data = await getAllBooksOverview();
 
     return {
-      paths: Books.map(({ node: { slug } }) => ({ params: { slug } })),
+      paths: Data.Books.map(({ node: { slug } }) => ({ params: { slug:slug } })),
       fallback: true,
     };
 }
