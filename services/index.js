@@ -178,3 +178,48 @@ export const getAllChapterSlugs = async (slug) => {
 
   return result.chaptersConnection.edges;
 }
+
+
+export const getSupportInfo = async () => {
+  const query = gql`
+  query Assets {
+    announcementsConnection {
+      edges {
+        node {
+          content {
+            raw
+          }
+        }
+      }
+    }
+    updateSchedulesConnection {
+      edges {
+        node {
+          content {
+            raw
+          }
+        }
+      }
+    }
+    supportsConnection {
+      edges {
+        node {
+          aboutContent {
+            raw
+          }
+          contactContent {
+            raw
+          }
+          supportContent {
+            raw
+          }
+        }
+      }
+    }
+  }          
+`
+
+const result = await request(graphqlAPI, query);
+
+return {SupportInfo: result.supportsConnection.edges, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
+}

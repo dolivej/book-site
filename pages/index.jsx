@@ -7,7 +7,7 @@ import { useRouter } from 'next/dist/client/router';
 
 const navigation = [
   { name: 'All Books', href: '/', current: true },
-  { name: 'Support', href: '/', current: false },
+  { name: 'Support', href: '/support/support', current: false },
 ]
 
 const Home = ({ Books, UpdateSchedule, Announcements }) => {

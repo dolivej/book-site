@@ -11,7 +11,7 @@ import supabase from '../../supabase/public'
 
 const navigation = [
     { name: 'All Books', href: '/', current: false },
-    { name: 'Support', href: '/', current: false },
+    { name: 'Support', href: '/support/support', current: false },
 ]
 
 const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
