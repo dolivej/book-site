@@ -5,7 +5,7 @@ import Link from 'next/link'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
-
+ 
 export default function Navbar({title, navigation, target}) {
   return (
     <Disclosure as="nav" className="bg-black shadow-lg">
