@@ -47,7 +47,7 @@ const SupportPage = ({ SupportInfo, UpdateSchedule, Announcements }) => {
         return <h3 key={index} className="text-xl font-semibold mb-4">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</h3>;
       case 'paragraph':
         if(obj.children[1] != undefined && obj.children[1].href != undefined){
-            return <p className="mb-8">For you folks I have setup a <a key={index} className="mb-8 underline text-blue-500" href={'https://www.' + obj.children[1].href} target="_blank">{'Patreon you can access here'}</a>. For now I only have one tier at $5/month, with this you get:</p>;
+            return <p className="mb-8">You can support me on my <a key={index} className="mb-8 underline text-blue-500" href={'https://www.' + obj.children[1].href} target="_blank">{'Patreon you can access here'}</a>. For now I only have one tier at $5/month, with this you get:</p>;
 
         }
         return <p key={index} className="mb-8">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</p>;
