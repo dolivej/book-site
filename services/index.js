@@ -67,7 +67,7 @@ export const getSpecificBookOverview = async (slug) => {
             description {
                 raw
             }
-            chapters {
+            chapters(first: 100) {
                 slug
                 title
             }

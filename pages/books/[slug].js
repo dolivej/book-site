@@ -15,7 +15,6 @@ const navigation = [
 ]
 
 const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
-
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
   const [views, setViews] = useState(69)
 
