@@ -9,8 +9,8 @@ export default async function comments(req,res) {
     var slug = inputData.slug;
 
     const Chapter = await getChapter(slug)
-    var newComments = Chapter.comments || {comments:[]}
-
+    var newComments = Chapter.Chapter.comments || {comments:[]}
+    
     if(inputData.location == "new"){
       newComments.comments.push(inputData.comment)
     }else{
@@ -55,6 +55,7 @@ export default async function comments(req,res) {
 
     return res.status(200).send(result2.publishChapter)
   } catch (error) {
+    // console.log(error)
     return res.status(400)
   }
 }
