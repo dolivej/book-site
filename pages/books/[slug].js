@@ -91,10 +91,12 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
 
     fetchViews()
 
-    if(Book !== undefined && Book.reviews){
-      updateReviewCounts(Book.reviews.reviews)
-    }else{
-      updateReviewCounts([{rating:5}])
+    if(Book){
+      if(Book.reviews){
+        updateReviewCounts(Book.reviews.reviews)
+      }else{
+        updateReviewCounts([{rating:5}])
+      }
     }
   },[router.asPath]);
 
