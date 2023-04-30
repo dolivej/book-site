@@ -62,7 +62,7 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
   const router = useRouter();
 
   useEffect(() => {
-    setLocalReviews(Book.reviews || {reviews:[]})
+    //setLocalReviews(Book.reviews || {reviews:[]})
     setShowSucessMessage(false)
     if(localStorage.getItem('bookSiteDataSave') == "true"){
       setEmail(localStorage.getItem('bookSiteEmail'))
