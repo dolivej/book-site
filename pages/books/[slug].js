@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import Head from 'next/head'
 import { Navbar, BookShowcase } from '../../components'
 import { getSpecificBookOverview, getAllBooksOverview } from '../../services'
@@ -7,7 +7,8 @@ import NextNProgress from 'nextjs-progressbar';
 import moment from 'moment';
 import { useRouter } from 'next/dist/client/router';
 import supabase from '../../supabase/public'
-
+import { Rating } from 'react-simple-star-rating'
+import Gravatar from 'react-gravatar'
 
 const navigation = [
     { name: 'All Books', href: '/', current: false },
@@ -17,6 +18,24 @@ const navigation = [
 const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
   const [views, setViews] = useState(69)
+  const [error, setError] = useState(false);
+  const [showSuccessMessage, setShowSucessMessage] = useState(false);
+  const [showLoadingMessage, setLoadingMessage] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [saveData, setSaveData] = useState(true);
+  const nameEl = useRef();
+  const emailEl = useRef();
+  const storeDataEl = useRef();
+  const [rating, setRating] = useState(0)
+  const [localReviews, setLocalReviews] = useState(Book.reviews || {reviews:[]});
+  const [numReviews, setNumReviews] = useState(1)
+  const [totalReview, setTotalReview] = useState(5)
+
+  // Catch Rating value
+  const handleRating = (rate) => {
+    setRating(rate)
+  }
 
   if(Book == undefined){
     return (
@@ -30,9 +49,29 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
       ) 
   }
 
+  const updateReviewCounts = (reviewArray) => {
+    let total = 0;
+    for (var i = 0; i < reviewArray.length; i++) {
+      total = total + reviewArray[i].rating
+    }
+
+    setNumReviews(reviewArray.length)
+    setTotalReview(total / reviewArray.length)
+  }
+
   const router = useRouter();
 
   useEffect(() => {
+    setLocalReviews(Book.reviews || {reviews:[]})
+    setShowSucessMessage(false)
+    if(localStorage.getItem('bookSiteDataSave') == "true"){
+      setEmail(localStorage.getItem('bookSiteEmail'))
+      setName(localStorage.getItem('bookSiteName'))
+    }else{
+      setEmail("")
+      setName("")
+    }
+
     const fetchViews = async () => {
       const { data, error } = await supabase
         .from('views_per_slug')
@@ -52,7 +91,75 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
 
     fetchViews()
 
+    if(Book.reviews){
+      updateReviewCounts(Book.reviews.reviews)
+    }else{
+      updateReviewCounts([{rating:5}])
+    }
   },[router.asPath]);
+
+  const handleReviewSubmission = (commentId,replyName) => {
+    if(!(typeof window === "undefined")){
+      setError(false)
+
+      const comment = document.getElementById("comment_box_" + commentId).value
+
+      var commentDateObj = new Date();  //.toString()
+      const commentDate = commentDateObj.toString()
+
+      if(!rating || !name) {
+        setError(true)
+        return;
+      }
+
+      if(saveData == true){
+        window.localStorage.setItem('bookSiteDataSave', true);
+        window.localStorage.setItem('bookSiteEmail', email);
+        window.localStorage.setItem('bookSiteName', name);
+      }else{
+        window.localStorage.setItem('bookSiteDataSave', false);
+      }
+
+      const reviewObj = { 
+        name, 
+        email, 
+        content: comment, 
+        date: commentDate,
+        rating,
+      }
+
+      setLoadingMessage(true)
+
+      submitReview(reviewObj, commentId, Book.slug)
+        .then((res) => {
+          console.log("success posted review")
+          setLoadingMessage(false)
+          setShowSucessMessage(true)
+
+          setLocalReviews(res.reviews)
+          updateReviewCounts(res.reviews.reviews)
+          setTimeout(() => {
+            setShowSucessMessage(false)
+
+            var x_position = res.reviews.reviews.length-1
+
+            if(commentId == "new"){
+              document.getElementById("comment_" + x_position + "-base").scrollIntoView();
+            }else{
+              var locations = commentId.split("-")
+              x_position = parseInt(locations[0])
+              var y_position = res.reviews.reviews[x_position].replies.length-1
+
+              document.getElementById("comment_" + x_position + "-" + y_position).scrollIntoView();
+            }
+          }, 1000);
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+      
+    }
+  }
 
   const getContentFragment = (index, text, obj, type) => {
     let modifiedText = text;
@@ -95,11 +202,11 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
     return (
         <div>
           <Head>
-            <title>{"David's Books - " + Book.title}</title>
+            <title>{"Grimdark Books - " + Book.title}</title>
             <link rel="icon" href="/favicon.ico" />
           </Head>
           <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
-          <Navbar title={"David's Books"} target={'/'} navigation={navigation}/>
+          <Navbar title={"Grimdark Books"} target={'/'} navigation={navigation}/>
           <div className="mx-auto max-w-7xl pt-8 px-8 lg:w-full md:w-64 lg:ml-auto md:ml-auto lg:mr-2 md:mr-2 block lg:hidden md:hidden">
             <div className="">
               {!isAnnouncementOpen && <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="cursor-pointer flex mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
@@ -143,7 +250,7 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
             <div className='sm:w-5/5 md:w-2/5 lg:w-1/5 items-center justify-center pb-8'>
               <img src={Book.cover.url} className='drop-shadow-md'/>
             </div>
-            <div className='sm:w-5/5 md:w-3/5 lg:w-3/5 items-center justify-center sm:px-0 md:pl-12'>
+            <div className='sm:w-5/5 md:w-3/5 lg:w-3/5 items-center justify-center sm:px-0 md:pl-12 mb-10'>
               <h1 className='font-bold text-5xl'>{Book.title}</h1>
               <div className="flex select-none mt-1 font-semibold text-lg">
                     <div style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-large mt-3 text-white mr-2 px-2 py-1 rounded">{Book.wordCount+"K words"}</div>
@@ -178,6 +285,54 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
                 {Book.chapters.map((chapter) => <Link href={'/chapters/'+chapter.slug} style={{backgroundColor:"#FCA311"}} className="text-large mt-3 text-white mr-2 px-2 py-2 rounded cursor-pointer text-center hover:drop-shadow-md hover:scale-105 ease-in-out duration-100">{chapter.title.split(':')[0]}</Link>)}
 
               </div>
+              <h1 className='font-bold text-3xl mt-14'>Ratings:</h1>
+              <div className="flex select-none mt-1 font-semibold text-lg mb-10">
+                    <div style={{border:"2px solid #FCA311"}} className="lg:ml-0 font-bold text-large mt-3 text-white mr-2 px-2 py-1 rounded"><Rating allowFraction={true} initialValue={totalReview} readonly={true} emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }} /></div>
+                    <div style={{backgroundColor:"#FCA311"}} className="text-3xl font-bold mt-3 text-white mr-2 px-2 py-1 rounded">{totalReview + "/5 ("+numReviews + " reviews)"}</div>
+              </div>
+              <div style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="text-xl mt-5 w-full drop-shadow-lg pt-8 px-5 pb-1 mb-10">
+              <div className='flex'>
+                <h3 className='text-lg md:text-lg lg:text-3xl font-semibold mr-2'>Leave a review:</h3>
+                <Rating onClick={handleRating} emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+              </div>
+              <div className='grid grid-cols-1 gap-4 mb-4'>
+                <textarea id={"comment_box_new"} role="textbox" className='p-4 outline-none w-full rounded focus:ring-2 focus:ring-yellow-400 bg-gray-100 text-sm mt-4 text-gray-700 h-30' placeholder='Comments (optional)' name='comment'></textarea>
+              </div>
+              <div className='grid grid-cols-2 gap-4 mb-4'>
+                <input type="text" ref={nameEl} className='p-4 outline-none w-full rounded focus:ring-2 focus:ring-yellow-400 bg-gray-100 text-sm mt-4 text-gray-700' placeholder='Name' name='username' value={name} onChange={e => setName(e.target.value)}/>
+                <input type="text" ref={emailEl} className='p-4 outline-none w-full rounded focus:ring-2 focus:ring-yellow-400 bg-gray-100 text-sm mt-4 text-gray-700' placeholder='Email (Optional)' name='email' value={email} onChange={e => setEmail(e.target.value)}/>
+              </div>
+              <div className='grid grid-cols-1 gap-4 mb-4'>
+                <div>
+                  <input type="checkbox" ref={storeDataEl} className='h-3 rounded cursor-pointer' defaultChecked={saveData} onChange={e => {setSaveData(e.target.checked)}}/>
+                  <label className='text-sm text-gray-500 px-2 select-none' htmlFor='storeData'>Save 'Name' and 'Email' for next time I comment.</label>
+                </div>
+                
+              </div>
+              <button style={{backgroundColor:"#FCA311"}} className="lg:ml-0 text-normal font-semibold mt-0 mb-8 text-white mr-4 px-4 py-2 rounded cursor-pointer ease-in-out duration-100 hover:drop-shadow-md active:drop-shadow-none" onClick={() => {handleReviewSubmission("new",null)}}>Post Review</button>
+              {error && <p className='text-sm font-semibold text-red-500 mb-8'>*Please select a rating and fill out name!*</p>}
+              {showSuccessMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Success!</p>}
+              {showLoadingMessage && <p className='text-sm font-semibold text-green-500 mb-8'>Submitting...</p>}
+              </div>
+              {localReviews.reviews.map((review, index_x) => {
+              return (
+                <div id={"comment_" + index_x + "-base"}>
+                  <div style={{backgroundColor:"white", borderTop: "thin solid #FCA311", borderBottom: "thin solid #FCA311", marginTop: "-1px"}} className='grid grid-cols-1 gap-4'>
+                    <div className='w-full flex py-10'>
+                      <div className='w-1/6 mr-5 sm:mr-5 md:mr-0 lg:mr-0'>
+                        <Gravatar default="identicon" email={review.email || review.name + "@email.com"} className='shadow-md rounded-lg' size={75}/>
+                      </div>
+                      <div className='w-5/6'>
+                          <Rating size={15} initialValue={review.rating} readonly={true} emptyStyle={{ display: "flex" }} fillStyle={{ display: "-webkit-inline-box" }}/>
+                          <h4 className='text-lg font-bold'>{review.name}</h4>
+                          <p className='text-sm text-gray-400 pt-1'>{review.date}</p>
+                          <p className='text-lg pt-9'>{review.content}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
             </div>
             <div className="lg:w-64 md:w-64 lg:ml-auto md:ml-auto lg:-mr-6 md:-mr-6 hidden lg:block md:block mb-20">
               <div className="w-4/5 ml-7">
@@ -229,4 +384,13 @@ export async function getStaticPaths() {
       paths: Data.Books.map(({ node: { slug } }) => ({ params: { slug:slug } })),
       fallback: true,
     };
+}
+
+export const submitReview = async (review, location, slug) => {
+  const result = await fetch('/api/reviews', {
+    method: 'POST',
+    body: JSON.stringify({review, location, slug})
+  })
+
+  return result.json()
 }

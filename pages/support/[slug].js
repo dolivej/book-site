@@ -47,7 +47,7 @@ const SupportPage = ({ SupportInfo, UpdateSchedule, Announcements }) => {
         return <h3 key={index} className="text-xl font-semibold mb-4">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</h3>;
       case 'paragraph':
         if(obj.children[1] != undefined && obj.children[1].href != undefined){
-            return <p className="mb-8">You can support me on my <a key={index} className="mb-8 underline text-blue-500" href={'https://www.' + obj.children[1].href} target="_blank">{'Patreon you can access here'}</a>. For now I only have one tier at $5/month, with this you get:</p>;
+            return <p className="mb-8">You can support me on my <a key={index} className="mb-8 underline text-blue-500" href={'https://www.' + obj.children[1].href} target="_blank">{'Patreon you can access here'}</a>. For $5/month you:</p>;
 
         }
         return <p key={index} className="mb-8">{modifiedText.map((item, i) => <React.Fragment key={i}>{item}</React.Fragment>)}</p>;
@@ -73,11 +73,11 @@ const SupportPage = ({ SupportInfo, UpdateSchedule, Announcements }) => {
   return (
     <div>
       <Head>
-        <title>{"David's Books - Support"}</title>
+        <title>{"Grimdark Books - Support"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
-      <Navbar title="David's Books" target={'/'} navigation={navigation}/>
+      <Navbar title="Grimdark Books" target={'/'} navigation={navigation}/>
       <div className="mx-auto max-w-7xl pt-8 px-8 lg:w-full md:w-64 lg:ml-auto md:ml-auto lg:mr-2 md:mr-2 block lg:hidden md:hidden">
             <div className="">
               {!isAnnouncementOpen && <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="cursor-pointer flex mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
