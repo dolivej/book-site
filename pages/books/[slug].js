@@ -28,10 +28,9 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
   const emailEl = useRef();
   const storeDataEl = useRef();
   const [rating, setRating] = useState(0)
-  //const [localReviews, setLocalReviews] = useState(Book.reviews || {reviews:[]});
   const [localReviews, setLocalReviews] = useState({reviews:[]});
   const [numReviews, setNumReviews] = useState(1)
-  const [totalReview, setTotalReview] = useState(5)
+  const [totalReview, setTotalReview] = useState(4)
 
   // Catch Rating value
   const handleRating = (rate) => {
@@ -63,7 +62,6 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
   const router = useRouter();
 
   useEffect(() => {
-    //setLocalReviews(Book.reviews || {reviews:[]})
     setShowSucessMessage(false)
     if(localStorage.getItem('bookSiteDataSave') == "true"){
       setEmail(localStorage.getItem('bookSiteEmail'))
@@ -92,13 +90,14 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
 
     fetchViews()
 
-    // if(Book){
-    //   if(Book.reviews){
-    //     updateReviewCounts(Book.reviews.reviews)
-    //   }else{
-    //     updateReviewCounts([{rating:5}])
-    //   }
-    // }
+    if(Book){
+      setLocalReviews(Book.reviews || {reviews:[]})
+      if(Book.reviews){
+        updateReviewCounts(Book.reviews.reviews)
+      }else{
+        updateReviewCounts([{rating:4}])
+      }
+    }
   },[router.asPath]);
 
   const handleReviewSubmission = (commentId,replyName) => {
