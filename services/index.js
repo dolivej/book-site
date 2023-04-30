@@ -74,6 +74,7 @@ export const getSpecificBookOverview = async (slug) => {
             authors {
                 name
             }
+            reviews
         }
         announcementsConnection {
           edges {

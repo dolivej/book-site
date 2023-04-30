@@ -56,11 +56,11 @@ const Home = ({ Books, UpdateSchedule, Announcements }) => {
   return (
     <div>
       <Head>
-        <title>David's Books</title>
+        <title>Grimdark Books</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NextNProgress color="#FCA311" height={6} stopDelayMs={200}/>
-      <Navbar title="David's Books" target={'/'} navigation={navigation}/>
+      <Navbar title="Grimdark Books" target={'/'} navigation={navigation}/>
       <div className="mx-auto max-w-7xl pt-8 px-8 lg:w-full md:w-64 lg:ml-auto md:ml-auto lg:mr-2 md:mr-2 block lg:hidden md:hidden">
           <div className="">
             {!isAnnouncementOpen && <div onClick={()=>{setIsAnnouncementOpen(!isAnnouncementOpen)}} style={{backgroundColor:"white", borderTop: "thick double #FCA311", borderBottom: "thick double #FCA311"}} className="cursor-pointer flex mt-0 w-full drop-shadow-lg pt-2 px-4 pb-1 ease-in-out duration-100">
