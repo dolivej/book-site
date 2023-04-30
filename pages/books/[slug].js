@@ -92,7 +92,9 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
     fetchViews()
 
     if(Book){
+      console.log("here1")
       if(Book.reviews){
+        console.log("here2")
         updateReviewCounts(Book.reviews.reviews)
       }else{
         updateReviewCounts([{rating:5}])
