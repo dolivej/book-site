@@ -14,7 +14,26 @@ const navigation = [
   { name: 'Support', href: '/support/support', current: false },
 ]
 
-const ChapterPage = ({ Chapter, UpdateSchedule, Announcements }) => {
+const ChapterPage = ({ ChapterStatic, UpdateScheduleStatic, AnnouncementsStatic, url }) => {
+
+  const [Chapter, setChapter] = useState(ChapterStatic || [])
+  const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
+  const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
+  
+  useEffect(() => {
+    // declare the data fetching function
+    const fetchData = async () => {
+      const Data = (await getChapter(params.slug)) || {};
+      setChapter(Data.Chapter || [])
+      setUpdateSchedule(Data.UpdateSchedule || [])
+      setAnnouncements(Data.Announcements || [])
+    }
+  
+    // call the function
+    fetchData()
+  }, [])
+
+  
   if(Chapter == undefined){
     return (
         <div>
@@ -495,7 +514,7 @@ export async function getStaticProps({ params }) {
   const Data = await getChapter(params.slug)
 
   return {
-    props: { Chapter: Data.Chapter, UpdateSchedule : Data.UpdateSchedule || [], Announcements : Data.Announcements || [] }
+    props: { ChapterStatic: Data.Chapter, UpdateScheduleStatic : Data.UpdateSchedule || [], AnnouncementsStatic : Data.Announcements || [], url: params.slug}
   }
 }
 
