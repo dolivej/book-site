@@ -139,6 +139,9 @@ const Home = ({ Books, UpdateSchedule, Announcements }) => {
 
 export default Home
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
+
 export async function getStaticProps() {
   const Data = (await getAllBooksOverview()) || {};
 
