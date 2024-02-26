@@ -5,11 +5,11 @@ const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
 //forcing dynamic page behavior to get new data from database
 export const dynamic = 'force-dynamic';
-export const revalidate = 60;
+export const revalidate = 5;
 const apiClient = new GraphQLClient(graphqlAPI, {
   fetch: fetch,
   next: {
-    revalidate: 60,
+    revalidate: 5,
   },  
 });
 
