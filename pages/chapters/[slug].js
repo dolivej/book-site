@@ -16,7 +16,7 @@ const navigation = [
 
 const ChapterPage = ({ ChapterStatic, UpdateScheduleStatic, AnnouncementsStatic, url }) => {
 
-  const [Chapter, setChapter] = useState(ChapterStatic || [])
+  const [Chapter, setChapter] = useState(ChapterStatic)
   const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
   const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
   
