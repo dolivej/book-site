@@ -33,6 +33,7 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
   const [numReviews, setNumReviews] = useState(1)
   const [totalReview, setTotalReview] = useState(4)
 
+  //forcing dynamic behavior for this component
   const headersList = headers()
     
   // Catch Rating value
