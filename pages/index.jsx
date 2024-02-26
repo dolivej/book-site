@@ -29,6 +29,8 @@ const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
       setBooks(Data.Books || [])
       setUpdateSchedule(Data.UpdateSchedule || [])
       setAnnouncements(Data.Announcements || [])
+      console.log(Data.Announcements)
+      console.log("DATA REFRESHED")
     }
   
     // call the function
