@@ -16,9 +16,9 @@ const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
   const [isFirstRender,setIsFirstRender] = useState(true)
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
 
-  const [Books, setBooks] = useState(BooksStatic)
-  const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic)
-  const [Announcements, setAnnouncements] = useState(AnnouncementsStatic)
+  const [Books, setBooks] = useState(BooksStatic || [])
+  const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
+  const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
 
   //enabling dynamic load of new data on render
   useEffect(() => {
