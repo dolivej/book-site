@@ -16,8 +16,11 @@ const navigation = [
 const Home = ({ Books, UpdateSchedule, Announcements }) => {
 
   //forcing dynamic check on page render
-  const router = useRouter()
-  router.refresh()
+  useEffect(() => {
+    const router = useRouter()
+    router.refresh()
+  }, []);
+  
   
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
 
