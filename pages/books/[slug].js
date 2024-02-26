@@ -9,7 +9,6 @@ import { useRouter } from 'next/dist/client/router';
 import supabase from '../../supabase/public'
 import { Rating } from 'react-simple-star-rating'
 import Gravatar from 'react-gravatar'
-import { headers } from 'next/headers'
 
 const navigation = [
     { name: 'All Books', href: '/', current: false },
@@ -33,9 +32,6 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
   const [numReviews, setNumReviews] = useState(1)
   const [totalReview, setTotalReview] = useState(4)
 
-  //forcing dynamic behavior for this component
-  const headersList = headers()
-    
   // Catch Rating value
   const handleRating = (rate) => {
     setRating(rate)
