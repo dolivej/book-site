@@ -20,7 +20,7 @@ const ChapterPage = ({ ChapterStatic, UpdateScheduleStatic, AnnouncementsStatic,
   const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
   const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
 
-  console.log("Refreshing Data...)
+  console.log("Refreshing Data...")
   useEffect(() => {
     // declare the data fetching function
     const fetchData = async () => {
