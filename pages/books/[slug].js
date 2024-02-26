@@ -371,6 +371,9 @@ const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
 
 export default BookDetails
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
+
 export async function getStaticProps({ params }) {
     const Data = await getSpecificBookOverview(params.slug)
 
