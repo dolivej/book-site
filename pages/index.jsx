@@ -12,6 +12,12 @@ const navigation = [
 
 const Home = ({ Books, UpdateSchedule, Announcements }) => {
 
+  //forcing dynamic check on page render
+  useEffect(() => {
+    router.refresh()
+  });
+
+  
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
 
   const getContentFragment = (index, text, obj, type) => {
