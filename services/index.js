@@ -3,6 +3,9 @@ import { request, gql } from 'graphql-request'
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
+
 export const getAllBooksOverview = async () => {
     const query = gql`
     query Assets {
