@@ -12,10 +12,30 @@ const navigation = [
   { name: 'Support', href: '/support/support', current: false },
 ]
 
-const Home = ({ Books, UpdateSchedule, Announcements }) => {
+const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
   const [isFirstRender,setIsFirstRender] = useState(true)
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
 
+  const [Books, setBooks] = useState(BooksStatic)
+  const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic)
+  const [Announcements, setAnnouncements] = useState(AnnouncementsStatic)
+
+  //enabling dynamic load of new data on render
+  useEffect(() => {
+    // declare the data fetching function
+    const fetchData = async () => {
+      const Data = (await getAllBooksOverview()) || {};
+      setBooks(Data.Books || [])
+      setUpdateSchedule(Data.UpdateSchedule || [])
+      setAnnouncements(Data.Announcements || [])
+    }
+  
+    // call the function
+    fetchData()
+  }, [])
+
+  
+  
   const getContentFragment = (index, text, obj, type) => {
     let modifiedText = text;
 
