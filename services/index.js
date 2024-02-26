@@ -1,11 +1,16 @@
 import { graphql } from 'graphql'
-import { request, gql } from 'graphql-request'
+import { request, gql, GraphQLClient } from 'graphql-request'
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
 //forcing dynamic page behavior to get new data from database
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+const apiClient = new GraphQLClient(graphqlAPI, {
+  next: {
+    revalidate: 0,
+  },  
+});
 
 export const getAllBooksOverview = async () => {
     const query = gql`
@@ -49,7 +54,7 @@ export const getAllBooksOverview = async () => {
     }          
   `
 
-  const result = await request(graphqlAPI, query);
+  const result = await apiClient.request(query);
 
   return {Books: result.booksConnection.edges, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
@@ -101,7 +106,7 @@ export const getSpecificBookOverview = async (slug) => {
     } 
   `
 
-  const result = await request(graphqlAPI, query, { slug });
+  const result = await apiClient.request(query, { slug });
   
   return {Book: result.book, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
@@ -160,7 +165,7 @@ export const getChapter = async (slug) => {
   } 
   `
 
-  const result = await request(graphqlAPI, query, { slug });
+  const result = await apiClient.request(query, { slug });
 
   return {Chapter: result.chapter, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
@@ -179,7 +184,7 @@ export const getAllChapterSlugs = async (slug) => {
   }
   `
 
-  const result = await request(graphqlAPI, query, { slug });
+  const result = await apiClient.request(query, { slug });
 
   return result.chaptersConnection.edges;
 }
@@ -224,7 +229,7 @@ export const getSupportInfo = async () => {
   }          
 `
 
-const result = await request(graphqlAPI, query);
+const result = await apiClient.request(query);
 
 return {SupportInfo: result.supportsConnection.edges, UpdateSchedule: result.updateSchedulesConnection.edges, Announcements: result.announcementsConnection.edges};
 }
