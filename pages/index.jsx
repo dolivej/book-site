@@ -23,6 +23,7 @@ const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
   //enabling dynamic load of new data on render
   useEffect(() => {
     // declare the data fetching function
+    console.log("REFRESHING DATA")
     const fetchData = async () => {
       const Data = (await getAllBooksOverview()) || {};
       setBooks(Data.Books || [])
