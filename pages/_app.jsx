@@ -8,5 +8,7 @@ function MyApp({ Component, pageProps }) {
   </>
 }
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
 
 export default MyApp
