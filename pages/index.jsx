@@ -169,6 +169,6 @@ export async function getStaticProps() {
   const Data = (await getAllBooksOverview()) || {};
 
   return {
-    props: { Books : Data.Books || [], UpdateSchedule : Data.UpdateSchedule || [], Announcements : Data.Announcements || []}
+    props: { BooksStatic : Data.Books || [], UpdateScheduleStatic : Data.UpdateSchedule || [], AnnouncementsStatic : Data.Announcements || []}
   }
 }
