@@ -3,7 +3,8 @@ import React, {useState, useEffect} from 'react';
 import { Navbar, BookShowcase } from '../components'
 import { getAllBooksOverview } from '../services'
 import NextNProgress from 'nextjs-progressbar';
-import { useRouter } from 'next/dist/client/router';
+//import { useRouter } from 'next/dist/client/router';
+import { useRouter } from 'next/navigation'
 
 const navigation = [
   { name: 'All Books', href: '/', current: true },
