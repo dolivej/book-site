@@ -12,30 +12,30 @@ const navigation = [
   { name: 'Support', href: '/support/support', current: false },
 ]
 
-const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
+const Home = ({ Books, UpdateSchedule, Announcements }) => {
   const [isFirstRender,setIsFirstRender] = useState(true)
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
 
-  const [Books, setBooks] = useState(BooksStatic || [])
-  const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
-  const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
+  // const [Books, setBooks] = useState(BooksStatic || [])
+  // const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
+  // const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
 
-  //enabling dynamic load of new data on render
-  useEffect(() => {
-    // declare the data fetching function
-    //console.log("REFRESHING DATA")
-    const fetchData = async () => {
-      const Data = (await getAllBooksOverview()) || {};
-      setBooks(Data.Books || [])
-      setUpdateSchedule(Data.UpdateSchedule || [])
-      setAnnouncements(Data.Announcements || [])
-      //console.log(Data.Announcements)
-      //console.log("DATA REFRESHED")
-    }
+  // //enabling dynamic load of new data on render
+  // useEffect(() => {
+  //   // declare the data fetching function
+  //   //console.log("REFRESHING DATA")
+  //   const fetchData = async () => {
+  //     const Data = (await getAllBooksOverview()) || {};
+  //     setBooks(Data.Books || [])
+  //     setUpdateSchedule(Data.UpdateSchedule || [])
+  //     setAnnouncements(Data.Announcements || [])
+  //     //console.log(Data.Announcements)
+  //     //console.log("DATA REFRESHED")
+  //   }
   
-    // call the function
-    fetchData()
-  }, [])
+  //   // call the function
+  //   fetchData()
+  // }, [])
 
   
   
@@ -172,6 +172,6 @@ export async function getStaticProps() {
   const Data = (await getAllBooksOverview()) || {};
 
   return {
-    props: { BooksStatic : Data.Books || [], UpdateScheduleStatic : Data.UpdateSchedule || [], AnnouncementsStatic : Data.Announcements || []}
+    props: { Books : Data.Books || [], UpdateSchedule : Data.UpdateSchedule || [], Announcements : Data.Announcements || []}
   }
 }
