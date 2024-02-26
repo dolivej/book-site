@@ -1,12 +1,11 @@
-'use client'
+'use server'
 
 import Head from 'next/head'
 import React, {useState, useEffect} from 'react';
 import { Navbar, BookShowcase } from '../components'
 import { getAllBooksOverview } from '../services'
 import NextNProgress from 'nextjs-progressbar';
-//import { useRouter } from 'next/dist/client/router';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/dist/client/router';
 
 const navigation = [
   { name: 'All Books', href: '/', current: true },
@@ -15,17 +14,6 @@ const navigation = [
 
 const Home = ({ Books, UpdateSchedule, Announcements }) => {
   const [isFirstRender,setIsFirstRender] = useState(true)
-  
-  //forcing dynamic check on page render
-  useEffect(() => {
-    if(isFirstRender){
-      setIsFirstRender(false)
-      const router = useRouter()
-      router.refresh()
-    }
-  }, []);
-  
-  
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
 
   const getContentFragment = (index, text, obj, type) => {
