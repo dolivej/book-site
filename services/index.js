@@ -1,6 +1,5 @@
 import { graphql } from 'graphql'
 import { request, gql } from 'graphql-request'
-import { headers } from 'next/headers'
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
@@ -9,9 +8,6 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const getAllBooksOverview = async () => {
-    //force dynamic by requesting cookies
-    const headersList = headers()
-    
     const query = gql`
     query Assets {
       booksConnection {
@@ -60,9 +56,6 @@ export const getAllBooksOverview = async () => {
 
 
 export const getSpecificBookOverview = async (slug) => {
-     //force dynamic by requesting cookies
-    const headersList = headers()
-    
     const query = gql`
     query Assets($slug: String!) {
         book(where: {slug: $slug}){
@@ -114,10 +107,7 @@ export const getSpecificBookOverview = async (slug) => {
 }
 
 
-export const getChapter = async (slug) => {
-     //force dynamic by requesting cookies
-    const headersList = headers()
-    
+export const getChapter = async (slug) => {   
   const query = gql`
   query Assets($slug: String!) {
       chapter(where: {slug: $slug}){
@@ -177,9 +167,6 @@ export const getChapter = async (slug) => {
 
 
 export const getAllChapterSlugs = async (slug) => {
-     //force dynamic by requesting cookies
-    const headersList = headers()
-    
   const query = gql`
   query Assets {
     chaptersConnection {
@@ -198,10 +185,7 @@ export const getAllChapterSlugs = async (slug) => {
 }
 
 
-export const getSupportInfo = async () => {
-     //force dynamic by requesting cookies
-    const headersList = headers()
-    
+export const getSupportInfo = async () => { 
   const query = gql`
   query Assets {
     announcementsConnection {
