@@ -28,6 +28,7 @@ const ChapterPage = ({ ChapterStatic, UpdateScheduleStatic, AnnouncementsStatic,
       setChapter(Data.Chapter)
       setUpdateSchedule(Data.UpdateSchedule || [])
       setAnnouncements(Data.Announcements || [])
+      console.log(Data.Chapter)
       console.log("Data Refreshed!")
     }
   
