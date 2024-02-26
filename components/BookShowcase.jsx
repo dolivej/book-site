@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 //forcing dynamic page behavior to get new data from database
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const BookShowcase = ({ book }) => {
 
