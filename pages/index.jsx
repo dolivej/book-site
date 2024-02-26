@@ -33,7 +33,7 @@ const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
   
     // call the function
     fetchData()
-  }, [])
+  })
 
   
   
