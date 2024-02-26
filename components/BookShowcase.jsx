@@ -1,6 +1,9 @@
 import React from "react";
 import Link from 'next/link'
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
+
 const BookShowcase = ({ book }) => {
 
     const getContentFragment = (index, text, obj, type) => {
