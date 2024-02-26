@@ -1,6 +1,7 @@
 import { graphql } from 'graphql'
 import { request, gql } from 'graphql-request'
-
+import { unstable_noStore as noStore } from 'next/cache';
+ 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
 //forcing dynamic page behavior to get new data from database
@@ -8,6 +9,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const getAllBooksOverview = async () => {
+    noStore();
     const query = gql`
     query Assets {
       booksConnection {
@@ -56,6 +58,7 @@ export const getAllBooksOverview = async () => {
 
 
 export const getSpecificBookOverview = async (slug) => {
+    noStore();
     const query = gql`
     query Assets($slug: String!) {
         book(where: {slug: $slug}){
@@ -108,6 +111,7 @@ export const getSpecificBookOverview = async (slug) => {
 
 
 export const getChapter = async (slug) => {   
+  noStore();
   const query = gql`
   query Assets($slug: String!) {
       chapter(where: {slug: $slug}){
@@ -167,6 +171,7 @@ export const getChapter = async (slug) => {
 
 
 export const getAllChapterSlugs = async (slug) => {
+  noStore();
   const query = gql`
   query Assets {
     chaptersConnection {
@@ -186,6 +191,7 @@ export const getAllChapterSlugs = async (slug) => {
 
 
 export const getSupportInfo = async () => { 
+  noStore();
   const query = gql`
   query Assets {
     announcementsConnection {
