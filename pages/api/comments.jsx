@@ -3,6 +3,9 @@ import { getChapter } from '../../services'
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
+
 export default async function comments(req,res) {
   try {
     const inputData = JSON.parse(req.body)
