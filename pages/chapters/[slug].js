@@ -487,6 +487,8 @@ const ChapterPage = ({ Chapter, UpdateSchedule, Announcements }) => {
 
 export default ChapterPage
 
+//forcing dynamic page behavior to get new data from database
+export const dynamic = 'force-dynamic';
 
 export async function getStaticProps({ params }) {
   const Data = await getChapter(params.slug)
