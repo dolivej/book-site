@@ -14,11 +14,15 @@ const navigation = [
 ]
 
 const Home = ({ Books, UpdateSchedule, Announcements }) => {
-
+  const [isFirstRender,setIsFirstRender] = useState(true)
+  
   //forcing dynamic check on page render
   useEffect(() => {
-    const router = useRouter()
-    router.refresh()
+    if(isFirstRender){
+      setIsFirstRender(false)
+      const router = useRouter()
+      router.refresh()
+    }
   }, []);
   
   
