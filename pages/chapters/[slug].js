@@ -23,8 +23,8 @@ const ChapterPage = ({ ChapterStatic, UpdateScheduleStatic, AnnouncementsStatic,
   useEffect(() => {
     // declare the data fetching function
     const fetchData = async () => {
-      const Data = (await getChapter(params.slug)) || {};
-      setChapter(Data.Chapter || [])
+      const Data = (await getChapter(url)) || {};
+      setChapter(Data.Chapter)
       setUpdateSchedule(Data.UpdateSchedule || [])
       setAnnouncements(Data.Announcements || [])
     }
