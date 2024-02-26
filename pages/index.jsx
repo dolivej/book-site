@@ -23,14 +23,14 @@ const Home = ({ BooksStatic, UpdateScheduleStatic, AnnouncementsStatic }) => {
   //enabling dynamic load of new data on render
   useEffect(() => {
     // declare the data fetching function
-    console.log("REFRESHING DATA")
+    //console.log("REFRESHING DATA")
     const fetchData = async () => {
       const Data = (await getAllBooksOverview()) || {};
       setBooks(Data.Books || [])
       setUpdateSchedule(Data.UpdateSchedule || [])
       setAnnouncements(Data.Announcements || [])
-      console.log(Data.Announcements)
-      console.log("DATA REFRESHED")
+      //console.log(Data.Announcements)
+      //console.log("DATA REFRESHED")
     }
   
     // call the function
