@@ -14,26 +14,26 @@ const navigation = [
   { name: 'Support', href: '/support/support', current: false },
 ]
 
-const ChapterPage = ({ Chapter, UpdateSchedule, Announcements, url }) => {
+const ChapterPage = ({ ChapterStatic, UpdateScheduleStatic, AnnouncementsStatic, url }) => {
 
-  // const [Chapter, setChapter] = useState(ChapterStatic)
-  // const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
-  // const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
+  const [Chapter, setChapter] = useState(ChapterStatic)
+  const [UpdateSchedule, setUpdateSchedule] = useState(UpdateScheduleStatic || [])
+  const [Announcements, setAnnouncements] = useState(AnnouncementsStatic || [])
 
-  // console.log("Refreshing Data...")
-  // useEffect(() => {
-  //   // declare the data fetching function
-  //   const fetchData = async () => {
-  //     const Data = (await getChapter(url)) || {};
-  //     setChapter(Data.Chapter)
-  //     setUpdateSchedule(Data.UpdateSchedule || [])
-  //     setAnnouncements(Data.Announcements || [])
-  //     console.log("Data Refreshed!")
-  //   }
+  console.log("Refreshing Data...")
+  useEffect(() => {
+    // declare the data fetching function
+    const fetchData = async () => {
+      const Data = (await getChapter(url)) || {};
+      setChapter(Data.Chapter)
+      setUpdateSchedule(Data.UpdateSchedule || [])
+      setAnnouncements(Data.Announcements || [])
+      console.log("Data Refreshed!")
+    }
   
-  //   // call the function
-  //   fetchData()
-  // }, [])
+    // call the function
+    fetchData()
+  }, [url])
 
   
   if(Chapter == undefined){
@@ -512,7 +512,7 @@ export async function getStaticProps({ params }) {
   const Data = await getChapter(params.slug)
 
   return {
-    props: { Chapter: Data.Chapter, UpdateSchedule : Data.UpdateSchedule || [], Announcements : Data.Announcements || [], url: params.slug}
+    props: { ChapterStatic: Data.Chapter, UpdateScheduleStatic : Data.UpdateSchedule || [], AnnouncementsStatic : Data.Announcements || [], url: params.slug}
   }
 }
 
