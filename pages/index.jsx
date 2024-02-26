@@ -14,6 +14,7 @@ const Home = ({ Books, UpdateSchedule, Announcements }) => {
 
   //forcing dynamic check on page render
   useEffect(() => {
+    const router = useRouter()
     router.refresh()
   }, []);
   
