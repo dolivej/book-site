@@ -9,7 +9,6 @@ import { useRouter } from 'next/dist/client/router';
 import supabase from '../../supabase/public'
 import { Rating } from 'react-simple-star-rating'
 import Gravatar from 'react-gravatar'
-import { useSearchParams } from 'next/navigation'
 
 const navigation = [
     { name: 'All Books', href: '/', current: false },
@@ -17,10 +16,6 @@ const navigation = [
 ]
 
 const BookDetails = ({ Book, UpdateSchedule, Announcements }) => {
-
-  //Forcing dynamic behavior
-  const searchParams = useSearchParams()
- 
   const [isAnnouncementOpen, setIsAnnouncementOpen] = useState(false)
   const [views, setViews] = useState(69)
   const [error, setError] = useState(false);
