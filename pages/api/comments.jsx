@@ -5,6 +5,7 @@ const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT
 
 //forcing dynamic page behavior to get new data from database
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export default async function comments(req,res) {
   try {
