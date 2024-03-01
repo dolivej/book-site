@@ -1,11 +1,9 @@
 import '../styles/globals.css'
 import { Analytics } from '@vercel/analytics/react';
 import Script from 'next/script';
-import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
   return <>
-    <Head>
       <Script strategy="lazyOnload">   
                   {`
                      !function (w, d, t) {
@@ -16,7 +14,6 @@ function MyApp({ Component, pageProps }) {
                       }(window, document, 'ttq');
                   `}
       </Script>
-    </Head>
     <Component {...pageProps} />
     <Analytics />
   </>
